@@ -2,21 +2,37 @@
 # How many artists are there?
 # Return a single column called "count" with a single row containing the count.
 query_1 = """
-
-    """
+select count("ArtistId") as count from "Artist"
+"""
 
 # PROBLEM 2
 # How many Artists do not have an Album associated with them?
 # Return a single column called "count" with a single row containing the count.
 query_2 = """
-
+select
+	count(ar."ArtistId")
+from
+	"Artist" ar
+left join "Album" al
+on
+	ar."ArtistId" = al."ArtistId"
+where
+	al."ArtistId" is null
 """
 
 # PROBLEM 3
 # How many Albums do not have an artist in the Artist table associated with them?
 # Return a single column called "count" with a single row containing the count.
 query_3 = """
-
+select
+	count(al."AlbumId")
+from
+	"Artist" ar
+full join "Album" al
+on
+	ar."ArtistId" = al."ArtistId"
+where
+	ar."ArtistId" is null
 """
 
 # PROBLEM 4
@@ -24,7 +40,16 @@ query_3 = """
 # Return a single column called "AC/DC Tracks",
 # in any order.
 query_4 = """
-
+select
+	t."Name" as "AC/DC Tracks"
+from
+	"Track" t
+join "Album" al
+on t."AlbumId" = al."AlbumId"
+join "Artist" ar
+on ar."ArtistId"  = al."ArtistId" 
+where
+	ar."Name" = 'AC/DC'
 """
 
 # PROBLEM 5
@@ -32,7 +57,18 @@ query_4 = """
 # Return a single column called "Total Sales" with a single row containing the total.
 
 query_5 = """
-
+select
+	sum(t."UnitPrice" * il."Quantity") as "Total Sales"
+from
+	"Track" t
+join "Album" al
+on t."AlbumId" = al."AlbumId"
+join "Artist" ar
+on ar."ArtistId"  = al."ArtistId" 
+join "InvoiceLine" il
+on il."TrackId" = t."TrackId" 
+where
+	ar."Name" = 'AC/DC'
 """
 
 # PROBLEM 6
